@@ -41,24 +41,35 @@ const OTPForm = () => {
         setGeneratedOtp(code);
 
         try {
-            // Note: In a real app, you'd send this via EmailJS
-            // To prevent errors if keys are missing, we'll log it and proceed if in "demo" mode
-            console.log('Generated OTP:', code);
+            console.log('Attempting to send OTP to:', email);
 
-            if (emailConfig.publicKey !== 'YOUR_PUBLIC_KEY') {
+            if (emailConfig.publicKey && emailConfig.publicKey !== 'YOUR_PUBLIC_KEY') {
                 const templateParams = {
-                    to_email: email,
-                    otp_code: code,
+                    name: email.split('@')[0], // Using part of email as name
+                    message: `Your Verification Code: ${code}`,
+                    time: new Date().toLocaleString(),
+                    title: 'OTP Verification Support',
+                    to_email: email, // Keep this just in case, but message contains the code
+                    reply_to: 'verification-system@example.com'
                 };
-                await emailjs.send(
+
+                const response = await emailjs.send(
                     emailConfig.serviceId,
                     emailConfig.templateId,
                     templateParams,
                     emailConfig.publicKey
                 );
+
+                console.log('EmailJS Response:', response.status, response.text);
+
+                if (response.status !== 200) {
+                    throw new Error(`EmailJS error: ${response.text}`);
+                }
+
+                console.log('OTP email sent successfully');
             } else {
-                console.warn('EmailJS keys missing. Simulating email send for demo.');
-                alert(`DEMO MODE: OTP sent to ${email} (Check console for code)`);
+                console.warn('EmailJS keys missing or invalid. Simulating email send for demo.');
+                alert(`DEMO MODE: OTP sent to ${email}\nCode: ${code}\n\n(Please update src/config/emailConfig.js with real keys)`);
             }
 
             setStep(2);

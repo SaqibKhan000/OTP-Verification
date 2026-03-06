@@ -1,5 +1,5 @@
 export const emailConfig = {
-  serviceId: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-  templateId: 'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-  publicKey: 'YOUR_PUBLIC_KEY', // Replace with your EmailJS public key
+  serviceId: 'service_5i6dkje', // Replace with your EmailJS service ID
+  templateId: 'template_8q7lhve', // Replace with your EmailJS template ID
+  publicKey: 'bBMi3I-s4-lL1L0kR', // Replace with your EmailJS public key
 };
